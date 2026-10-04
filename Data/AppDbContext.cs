@@ -18,13 +18,11 @@ namespace TransactionManagementSystem.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // تكوين علاقات النموذج
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.Transactions)
                 .HasForeignKey(t => t.UserId);
 
-            // البيانات الأولية
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -36,8 +34,7 @@ namespace TransactionManagementSystem.Data
                     Role = UserRole.Admin,
                     IsActive = true,
                     CreatedDate = System.DateTime.Now
-                }
-            );
+                });
         }
     }
 }

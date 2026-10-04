@@ -15,11 +15,14 @@ namespace TransactionManagementSystem.Services
             _context = context;
         }
 
-        public void AddTransaction(Transaction transaction)
+        public Transaction AddTransaction(Transaction transaction)
         {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+
             transaction.CreatedDate = DateTime.Now;
             _context.Transactions.Add(transaction);
             _context.SaveChanges();
+            return transaction;
         }
 
         public void UpdateTransaction(Transaction transaction)
@@ -30,40 +33,33 @@ namespace TransactionManagementSystem.Services
 
         public void DeleteTransaction(int id)
         {
-            var transaction = _context.Transactions.Find(id);
-            if (transaction != null)
+            var existing = _context.Transactions.FirstOrDefault(t => t.Id == id);
+            if (existing != null)
             {
-                _context.Transactions.Remove(transaction);
+                _context.Transactions.Remove(existing);
                 _context.SaveChanges();
             }
         }
 
-        public Transaction GetTransactionById(int id)
-        {
-            return _context.Transactions.FirstOrDefault(t => t.Id == id);
-        }
-
         public List<Transaction> GetAllTransactions()
         {
-            return _context.Transactions.ToList();
+            return _context.Transactions.OrderByDescending(t => t.CreatedDate).ToList();
         }
 
-        public List<Transaction> GetTransactionsByType(TransactionType type)
+        public List<Transaction> SearchTransactions(string searchText)
         {
-            return _context.Transactions.Where(t => t.Type == type).ToList();
-        }
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return GetAllTransactions();
+            }
 
-        public List<Transaction> GetTransactionsByStatus(TransactionStatus status)
-        {
-            return _context.Transactions.Where(t => t.Status == status).ToList();
-        }
-
-        public List<Transaction> SearchTransactions(string searchTerm)
-        {
+            var txt = searchText.Trim();
             return _context.Transactions
-                .Where(t => t.Title.Contains(searchTerm) || 
-                           t.ReferenceNumber.Contains(searchTerm) ||
-                           t.ContactName.Contains(searchTerm))
+                .Where(t => t.ReferenceNumber.Contains(txt)
+                    || t.Title.Contains(txt)
+                    || t.ContactName.Contains(txt)
+                    || t.Category.Contains(txt))
+                .OrderByDescending(t => t.CreatedDate)
                 .ToList();
         }
 
