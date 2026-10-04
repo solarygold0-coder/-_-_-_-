@@ -1,72 +1,38 @@
 # نظام إدارة المعاملات الصادرة والواردة
 
-تطبيق سطح مكتب احترافي مكتوب بـ C# و WPF لإدارة المعاملات الصادرة والواردة.
+## المشروع
+تطبيق سطح المكتب C# WPF لإدارة المعاملات الصادرة والواردة، مع شاشة تسجيل دخول، إدارة المعاملات، تقارير، وإحصاءات.
 
-## المميزات
+## التشغيل المحلي
+1. افتح المشروع في Visual Studio 2022
+2. تأكد من تثبيت حزمة NuGet التالية:
+   - Microsoft.EntityFrameworkCore.Sqlite
+3. اختر Configuration = Release
+4. قم ببناء المشروع: `dotnet build`
+5. شغّل التطبيق: `dotnet run`
 
-✅ واجهة عربية RTL احترافية
-✅ إدارة المعاملات (إضافة، تعديل، حذف، بحث)
-✅ تصنيفات الصادر والوارد
-✅ حالات المعاملة (معلقة، جاري، مكتملة، متأخرة)
-✅ لوحة تحكم مع إحصائيات
-✅ تقارير شاملة
-✅ نظام مستخدمين وأدوار
-✅ قاعدة بيانات محلية SQLite
-✅ تصميم Modern مع Material Design
+## تجهيز ملف الـ Installer
+يتم دعم تجهيز الـ installer على Windows باستخدام WiX Toolset.
 
-## المتطلبات
+### المتطلبات
+- Windows 10 أو Windows 11
+- Visual Studio 2022
+- WiX Toolset v3.11 أو أحدث
 
-- .NET 6.0 SDK أو أحدث
-- Visual Studio 2022 أو VS Code
-- SQL Server أو SQLite
+### خطوات البناء
+1. افتح PowerShell كـ Administrator
+2. انتقل إلى مجلد `Installer`
+3. نفذ:
+   ```powershell
+   .\build-installer.ps1
+   ```
+4. سيتم إنشاء ملف MSI داخل `Installer\bin\Release`
 
-## التثبيت
+### ملاحظات
+- الملف العملي يتم إنتاجه في وضع Release فقط
+- يمكن تثبيت التطبيق في نظام التشغيل Windows 10/11 بطريقة قياسية عبر ملف .msi
+- عند التثبيت، ستظهر اختصارات سطح المكتب وقائمة Start تلقائيًا
 
-1. استنساخ المستودع:
-```bash
-git clone https://github.com/solarygold0-coder/نظام_معاملات_صادر_وارد.git
-cd نظام_معاملات_صادر_وارد
-```
-
-2. فتح المشروع في Visual Studio
-
-3. استعادة NuGet packages:
-```bash
-dotnet restore
-```
-
-4. تحديث قاعدة البيانات:
-```bash
-dotnet ef database update
-```
-
-5. تشغيل التطبيق:
-```bash
-dotnet run
-```
-
-## الاستخدام
-
-### بيانات المسؤول الافتراضية
-- اسم المستخدم: admin
-- كلمة المرور: admin123
-
-## الهيكل
-
-```
-TransactionManagementSystem/
-├── Models/              # نماذج البيانات
-├── Data/               # قاعدة البيانات
-├── Services/           # الخدمات والمنطق
-├── ViewModels/         # ViewModels
-├── Views/              # واجهات المستخدم
-└── Resources/          # الموارد
-```
-
-## المطورون
-
-- solarygold0-coder
-
-## الرخصة
-
-MIT License
+## بيانات الدخول الافتراضية
+- اسم المستخدم: `admin`
+- كلمة المرور: `admin123`

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*"
+           Name="نظام إدارة المعاملات الصادرة والواردة"
+           Language="1033"
+           Version="1.0.0.0"
+           Manufacturer="solarygold0-coder"
+           UpgradeCode="30011A78-4D16-4A68-9B54-0446D89B0B11">
+
+    <Package InstallerVersion="500"
+             Compressed="yes"
+             InstallScope="perMachine"
+             Description="Installer for the professional outgoing and incoming transactions management system"
+             Comments="Installed by solarygold0-coder"
+             Languages="1033"
+             SummaryCodepage="1252" />
+
+    <MediaTemplate CabinetTemplate="transaction_{0}.cab" CompressionLevel="high" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="TransactionManagementSystem" />
+      </Directory>
+      <Directory Id="DesktopFolder" />
+      <Directory Id="ProgramMenuFolder" />
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="System Core" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="DesktopShortcutComponent" />
+      <ComponentRef Id="StartMenuShortcutComponent" />
+    </Feature>
+
+    <UI Id="WixUI_InstallDir">
+      <UIRef Id="WixUI_InstallDir" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" />
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" />
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[INSTALLFOLDER]" />
+    </UI>
+  </Product>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+      <Component Id="MainExecutableComponent" Directory="INSTALLFOLDER" Guid="D8413D8E-4369-41A1-97D9-4A815B40E006">
+        <File Id="ApplicationExe" Source="..\bin\Release\net6.0-windows\TransactionManagementSystem.exe" KeyPath="yes" />
+        <File Id="ApplicationDll" Source="..\bin\Release\net6.0-windows\TransactionManagementSystem.dll" />
+      </Component>
+    </ComponentGroup>
+
+    <Component Id="DesktopShortcutComponent" Directory="DesktopFolder" Guid="48651B2F-6D36-4C8F-99CB-5E4B7367FA40">
+      <Shortcut Id="DesktopShortcut"
+                Name="نظام إدارة المعاملات"
+                Target="[INSTALLFOLDER]TransactionManagementSystem.exe"
+                WorkingDirectory="INSTALLFOLDER" />
+      <RemoveFolder Id="DesktopFolderRemove" Directory="DesktopFolder" On="uninstall"/>
+      <RegistryValue Root="HKCU" Key="Software\TransactionManagementSystem" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+
+    <Component Id="StartMenuShortcutComponent" Directory="ProgramMenuFolder" Guid="A51BE9A4-7B05-4C31-A9A4-4C6B6A72CAF0">
+      <Shortcut Id="StartMenuShortcut"
+                Name="نظام إدارة المعاملات"
+                Target="[INSTALLFOLDER]TransactionManagementSystem.exe"
+                WorkingDirectory="INSTALLFOLDER" />
+      <RemoveFolder Id="ProgramMenuFolderRemove" Directory="ProgramMenuFolder" On="uninstall"/>
+      <RegistryValue Root="HKCU" Key="Software\TransactionManagementSystem" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+  </Fragment>
+</Wix>
