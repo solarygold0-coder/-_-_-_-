@@ -16,12 +16,21 @@ namespace TransactionManagementSystem.Services
 
         public User AuthenticateUser(string username, string password)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password && u.IsActive);
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return null;
+
+            return _context.Users
+                .FirstOrDefault(u => u.Username == username.Trim() && u.Password == password && u.IsActive);
         }
 
         public List<User> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return _context.Users.OrderBy(u => u.FullName).ToList();
+        }
+
+        public User GetDefaultAdminUser()
+        {
+            return _context.Users.FirstOrDefault(u => u.Role == UserRole.Admin);
         }
     }
 }

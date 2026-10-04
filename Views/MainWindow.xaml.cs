@@ -1,8 +1,5 @@
 using System;
-using System.Globalization;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using TransactionManagementSystem.Models;
 using TransactionManagementSystem.ViewModels;
 
@@ -11,13 +8,24 @@ namespace TransactionManagementSystem
     public partial class MainWindow : Window
     {
         private readonly MainViewModel _viewModel;
+        private readonly User _loggedInUser;
         private Transaction _editingTransaction;
 
-        public MainWindow()
+        public MainWindow() : this(new User
+        {
+            FullName = "مسؤول النظام",
+            Username = "admin"
+        })
+        {
+        }
+
+        public MainWindow(User loggedInUser)
         {
             InitializeComponent();
+            _loggedInUser = loggedInUser ?? new User { FullName = "مسؤول النظام", Username = "admin" };
             _viewModel = new MainViewModel();
             DataContext = _viewModel;
+            this.Title = "نظام إدارة المعاملات الصادرة والواردة - " + _loggedInUser.FullName;
             NewButton_Click(null, null);
         }
 
@@ -43,7 +51,7 @@ namespace TransactionManagementSystem
                 _ => TransactionStatus.Cancelled
             };
 
-            if (decimal.TryParse(AmountText.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
+            if (decimal.TryParse(AmountText.Text, out var amount))
             {
                 transaction.Amount = amount;
             }
